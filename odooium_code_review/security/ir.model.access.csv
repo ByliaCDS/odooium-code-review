@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odooium_github_repository_user,model_odooium_github_repository,group_odooium_user,1,0,0,0
+access_odooium_github_repository_manager,model_odooium_github_repository,group_odooium_manager,1,1,1,1
+access_odooium_github_user_user,model_odooium_github_user,group_odooium_user,1,0,0,0
+access_odooium_github_user_manager,model_odooium_github_user,group_odooium_manager,1,1,1,1
+access_odooium_pull_request_user,model_odooium_pull_request,group_odooium_user,1,0,0,0
+access_odooium_pull_request_manager,model_odooium_pull_request,group_odooium_manager,1,1,1,1
+access_odooium_code_review_user,model_odooium_code_review,group_odooium_user,1,0,0,0
+access_odooium_code_review_manager,model_odooium_code_review,group_odooium_manager,1,1,1,1
+access_odooium_review_comment_user,model_odooium_review_comment,group_odooium_user,1,1,0,0
+access_odooium_review_comment_manager,model_odooium_review_comment,group_odooium_manager,1,1,1,1

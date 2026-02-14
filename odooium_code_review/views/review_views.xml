@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Code Review Tree View -->
+        <record id="view_code_review_tree" model="ir.ui.view">
+            <field name="name">odooium.code_review.tree</field>
+            <field name="model">odooium.code_review</field>
+            <field name="arch" type="xml">
+                <tree string="Code Reviews" default_order="created_at desc">
+                    <field name="pr_id"/>
+                    <field name="reviewer"/>
+                    <field name="reviewer_type"/>
+                    <field name="status"/>
+                    <field name="score"/>
+                    <field name="created_at"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Code Review Form View -->
+        <record id="view_code_review_form" model="ir.ui.view">
+            <field name="name">odooium.code_review.form</field>
+            <field name="model">odooium.code_review</field>
+            <field name="arch" type="xml">
+                <form string="Code Review">
+                    <header>
+                        <button name="action_resubmit_for_review" string="Resubmit for Review" type="object" 
+                                class="btn-secondary" attrs="{'invisible': [('reviewer_type', '!=', 'ai')]}"/>
+                        <button name="action_view_pr" string="View PR" type="object" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="pr_id"/>
+                                <field name="reviewer"/>
+                                <field name="reviewer_type"/>
+                                <field name="ai_model"/>
+                            </group>
+                            <group>
+                                <field name="status"/>
+                                <field name="score"/>
+                                <field name="started_at"/>
+                                <field name="completed_at"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="summary" readonly="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Comments Summary">
+                                <group>
+                                    <field name="critical_count" readonly="1"/>
+                                    <field name="high_count" readonly="1"/>
+                                    <field name="medium_count" readonly="1"/>
+                                    <field name="low_count" readonly="1"/>
+                                    <field name="info_count" readonly="1"/>
+                                    <field name="total_comments" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Review Comment Tree View -->
+        <record id="view_review_comment_tree" model="ir.ui.view">
+            <field name="name">odooium.review_comment.tree</field>
+            <field name="model">odooium.review_comment</field>
+            <field name="arch" type="xml">
+                <tree string="Review Comments" default_order="created_at desc">
+                    <field name="review_id"/>
+                    <field name="file_path"/>
+                    <field name="line_number"/>
+                    <field name="severity"/>
+                    <field name="rule"/>
+                    <field name="is_resolved"/>
+                    <field name="created_at"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Review Comment Form View -->
+        <record id="view_review_comment_form" model="ir.ui.view">
+            <field name="name">odooium.review_comment.form</field>
+            <field name="model">odooium.review_comment</field>
+            <field name="arch" type="xml">
+                <form string="Review Comment">
+                    <header>
+                        <button name="action_resolve" string="Resolve" type="object" class="btn-success"
+                                attrs="{'invisible': [('is_resolved', '=', True)]}"/>
+                        <button name="action_reopen" string="Reopen" type="object" class="btn-secondary"
+                                attrs="{'invisible': [('is_resolved', '=', False)]}"/>
+                        <button name="action_view_in_pr" string="View in PR" type="object" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="review_id" readonly="1"/>
+                                <field name="file_path"/>
+                                <field name="line_number"/>
+                                <field name="severity"/>
+                            </group>
+                            <group>
+                                <field name="rule"/>
+                                <field name="rule_category"/>
+                                <field name="is_ai" readonly="1"/>
+                                <field name="is_resolved"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="comment" widget="html" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="created_at" readonly="1"/>
+                            <field name="updated_at" readonly="1"/>
+                            <field name="resolved_at"/>
+                            <field name="resolved_by"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Review Action -->
+        <record id="action_odooium_reviews" model="ir.actions.act_window">
+            <field name="name">Code Reviews</field>
+            <field name="res_model">odooium.code_review</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_code_review_tree"/>
+            <field name="target">current</field>
+        </record>
+    </data>
+</odoo>

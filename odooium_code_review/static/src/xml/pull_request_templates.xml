@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="odooium_code_review.PullRequestList" owl="1">
+        <div class="odooium_pr_list o_controller">
+            <div class="o_content">
+                <div class="container-fluid">
+                    <!-- Loading -->
+                    <div t-if="state.loading" class="text-center py-5">
+                        <i class="fa fa-spinner fa-spin fa-3x mb-3 text-primary"/>
+                        <h5>Loading pull requests...</h5>
+                    </div>
+
+                    <!-- PR List -->
+                    <div t-else="">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fa fa-code-pull-request mr-2"/>
+                                    Pull Requests
+                                    <span t-if="props.status" class="badge badge-info ml-2">
+                                        <t t-esc="props.status"/>
+                                    </span>
+                                </h5>
+                                <button class="btn btn-sm btn-secondary" t-on-click="onRefresh">
+                                    <i class="fa fa-refresh"/> Refresh
+                                </button>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Status</th>
+                                            <th>Score</th>
+                                            <th>Updated</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.pull_requests" t-as="pr" t-key="pr.id">
+                                            <tr t-att-class="'table-' + pr.severity_class">
+                                                <td><span class="badge badge-secondary"><t t-esc="pr.number"/></span></td>
+                                                <td><strong><t t-esc="pr.title"/></strong></td>
+                                                <td><t t-esc="pr.author"/></td>
+                                                <td>
+                                                    <span t-attf-class="badge badge-#{pr.status_class}">
+                                                        <t t-esc="pr.review_status"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="progress" style="width: 80px;">
+                                                        <div class="progress-bar" 
+                                                             t-att-style="'width:' + pr.ai_score + '%'"
+                                                             t-att-class="pr.score_class"/>
+                                                    </div>
+                                                    <small><t t-esc="pr.ai_score"/>%</small>
+                                                </td>
+                                                <td class="text-muted"><small><t t-esc="pr.time_ago"/></small></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary" t-on-click="() => this.onViewPr(pr)">
+                                                        View
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr t-if="state.pull_requests.length === 0">
+                                            <td colspan="7" class="text-center text-muted py-4">
+                                                No pull requests found
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- GitHub Repository Tree View -->
+        <record id="view_github_repository_tree" model="ir.ui.view">
+            <field name="name">odooium.github.repository.tree</field>
+            <field name="model">odooium.github_repository</field>
+            <field name="arch" type="xml">
+                <tree string="GitHub Repositories">
+                    <field name="name"/>
+                    <field name="full_name"/>
+                    <field name="owner"/>
+                    <field name="active_pr_count"/>
+                    <field name="pr_count"/>
+                    <field name="avg_score"/>
+                    <field name="is_active"/>
+                    <field name="auto_review_enabled"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- GitHub Repository Form View -->
+        <record id="view_github_repository_form" model="ir.ui.view">
+            <field name="name">odooium.github.repository.form</field>
+            <field name="model">odooium.github_repository</field>
+            <field name="arch" type="xml">
+                <form string="GitHub Repository">
+                    <header>
+                        <button name="action_sync_pull_requests" string="Sync PRs" type="object" class="btn-primary"/>
+                        <button name="action_test_webhook" string="Test Webhook" type="object" class="btn-secondary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="full_name"/>
+                                <field name="owner"/>
+                                <field name="github_id"/>
+                                <field name="webhook_id"/>
+                            </group>
+                            <group string="Settings">
+                                <field name="is_active"/>
+                                <field name="auto_review_enabled"/>
+                                <field name="ai_model"/>
+                                <field name="create_tasks"/>
+                                <field name="project_id"/>
+                            </group>
+                            <group string="Statistics">
+                                <field name="active_pr_count"/>
+                                <field name="pr_count"/>
+                                <field name="review_count"/>
+                                <field name="avg_score"/>
+                                <field name="last_sync_at"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Repository Action -->
+        <record id="action_odooium_repositories" model="ir.actions.act_window">
+            <field name="name">GitHub Repositories</field>
+            <field name="res_model">odooium.github_repository</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_github_repository_tree"/>
+            <field name="target">current</field>
+        </record>
+    </data>
+</odoo>

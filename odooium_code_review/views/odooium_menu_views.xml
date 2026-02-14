@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_odooium_root" 
+                  name="Odooium" 
+                  sequence="10" 
+                  web_icon="odooium,static/description/icon.png"/>
+        
+        <menuitem id="menu_odooium_code_review" 
+                  name="Code Review" 
+                  parent="menu_odooium_root" 
+                  sequence="10"
+                  action="action_odooium_dashboard"/>
+        
+        <!-- Repositories -->
+        <menuitem id="menu_odooium_repositories" 
+                  name="Repositories" 
+                  parent="menu_odooium_root" 
+                  sequence="20"
+                  action="action_odooium_repositories"/>
+        
+        <!-- Pull Requests -->
+        <menuitem id="menu_odooium_pull_requests" 
+                  name="Pull Requests" 
+                  parent="menu_odooium_root" 
+                  sequence="30"
+                  action="action_odooium_pull_requests"/>
+        
+        <!-- Reviews -->
+        <menuitem id="menu_odooium_reviews" 
+                  name="Reviews" 
+                  parent="menu_odooium_root" 
+                  sequence="40"
+                  action="action_odooium_reviews"/>
+        
+        <!-- Configuration -->
+        <menuitem id="menu_odooium_config" 
+                  name="Configuration" 
+                  parent="menu_odooium_root" 
+                  sequence="100" 
+                  groups="base.group_system"/>
+    </data>
+</odoo>

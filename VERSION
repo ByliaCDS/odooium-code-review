@@ -1,0 +1,17 @@
+# Odooium - AI Code Review
+
+## Version
+19.0.1.0.0
+
+## Installation
+See README.md for detailed installation instructions.
+
+## Quick Start
+1. Install module in Odoo 19
+2. Configure GitHub OAuth credentials
+3. Configure OpenAI/Anthropic API key
+4. Add GitHub repositories
+5. AI reviews will start automatically!
+
+## Support
+support@cds-solutions.com

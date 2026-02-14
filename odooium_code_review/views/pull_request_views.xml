@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Pull Request Tree View -->
+        <record id="view_pull_request_tree" model="ir.ui.view">
+            <field name="name">odooium.pull_request.tree</field>
+            <field name="model">odooium.pull_request</field>
+            <field name="arch" type="xml">
+                <tree string="Pull Requests" default_order="created_at desc">
+                    <field name="number"/>
+                    <field name="title"/>
+                    <field name="author"/>
+                    <field name="repository_id"/>
+                    <field name="state"/>
+                    <field name="review_status"/>
+                    <field name="ai_score"/>
+                    <field name="created_at"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Pull Request Form View -->
+        <record id="view_pull_request_form" model="ir.ui.view">
+            <field name="name">odooium.pull_request.form</field>
+            <field name="model">odooium.pull_request</field>
+            <field name="arch" type="xml">
+                <form string="Pull Request">
+                    <header>
+                        <button name="action_start_ai_review" string="Start AI Review" type="object" 
+                                class="btn-primary" attrs="{'invisible': [('review_status', '!=', 'pending')]}"/>
+                        <button name="action_view_on_github" string="View on GitHub" type="object" class="btn-secondary"/>
+                        <button name="action_view_task" string="View Task" type="object" class="btn-secondary"
+                                attrs="{'invisible': [('task_id', '=', False)]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="title" readonly="1"/></h1>
+                            <h2 class="text-muted">#<field name="number" readonly="1"/></h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="author" readonly="1"/>
+                                <field name="repository_id" readonly="1"/>
+                                <field name="branch" readonly="1"/>
+                                <field name="base_branch" readonly="1"/>
+                                <field name="commit_sha" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="state" readonly="1"/>
+                                <field name="review_status"/>
+                                <field name="ai_score"/>
+                                <field name="ai_model_used"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description" readonly="1"/>
+                            </page>
+                            <page string="Review Statistics">
+                                <group>
+                                    <field name="total_comments" readonly="1"/>
+                                    <field name="critical_issues" readonly="1"/>
+                                    <field name="high_issues" readonly="1"/>
+                                    <field name="medium_issues" readonly="1"/>
+                                    <field name="low_issues" readonly="1"/>
+                                    <field name="info_count" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="ai_review_started_at" readonly="1"/>
+                                    <field name="ai_review_completed_at" readonly="1"/>
+                                    <field name="ai_review_duration" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Odoo Task">
+                                <group>
+                                    <field name="task_id"/>
+                                    <field name="project_id"/>
+                                    <field name="stage_id"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Pull Request Action -->
+        <record id="action_odooium_pull_requests" model="ir.actions.act_window">
+            <field name="name">Pull Requests</field>
+            <field name="res_model">odooium.pull_request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_pull_request_tree"/>
+            <field name="target">current</field>
+        </record>
+    </data>
+</odoo>

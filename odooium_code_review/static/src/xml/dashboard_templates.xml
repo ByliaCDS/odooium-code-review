@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="odooium_code_review.Dashboard" owl="1">
+        <div class="odooium_dashboard o_controller">
+            <!-- Header -->
+            <div class="o_content">
+                <div class="container-fluid">
+                    <!-- Top Bar -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h2 class="o_web_settings_dashboard_title mb-0">
+                                    <i class="fa fa-robot mr-2"/>🐰 Odooium
+                                </h2>
+                                <div>
+                                    <button class="btn btn-secondary me-2" t-on-click="onRefresh" 
+                                            t-att-disabled="state.refreshing">
+                                        <i class="fa fa-refresh" t-att-class="{'fa-spin': state.refreshing}"/> Refresh
+                                    </button>
+                                    <button class="btn btn-primary" t-on-click="onNewPr">
+                                        <i class="fa fa-plus"/> New Repository
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div t-if="state.loading" class="text-center py-5">
+                        <i class="fa fa-spinner fa-spin fa-3x mb-3 text-primary"/>
+                        <h5>Loading dashboard...</h5>
+                    </div>
+
+                    <!-- Dashboard Content -->
+                    <div t-else="">
+                        <!-- Statistics Cards -->
+                        <div class="row mb-4">
+                            <div class="col-12 col-md-3 mb-3">
+                                <div class="card o_kanban_card border-primary mb-3">
+                                    <div class="card-body text-primary">
+                                        <div class="o_dashboard_stat">
+                                            <h3 class="o_stat_value mb-0"><t t-esc="state.stats.total_prs"/></h3>
+                                            <p class="o_stat_label">Total PRs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3 mb-3">
+                                <div class="card o_kanban_card border-warning mb-3">
+                                    <div class="card-body text-warning">
+                                        <div class="o_dashboard_stat">
+                                            <h3 class="o_stat_value mb-0"><t t-esc="state.stats.pending_prs"/></h3>
+                                            <p class="o_stat_label">Pending</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3 mb-3">
+                                <div class="card o_kanban_card border-info mb-3">
+                                    <div class="card-body text-info">
+                                        <div class="o_dashboard_stat">
+                                            <h3 class="o_stat_value mb-0"><t t-esc="state.stats.reviewing_prs"/></h3>
+                                            <p class="o_stat_label">Reviewing</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3 mb-3">
+                                <div class="card o_kanban_card border-success mb-3">
+                                    <div class="card-body text-success">
+                                        <div class="o_dashboard_stat">
+                                            <h3 class="o_stat_value mb-0"><t t-esc="state.stats.completed_prs"/></h3>
+                                            <p class="o_stat_label">Completed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Secondary Stats -->
+                        <div class="row mb-4">
+                            <div class="col-12 col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">PRs Today</h6>
+                                        <h3><t t-esc="state.stats.today_prs"/></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">Average Score</h6>
+                                        <h3>
+                                            <t t-esc="state.stats.avg_score"/>%
+                                            <small class="text-muted">/ 100</small>
+                                        </h3>
+                                        <div class="progress mt-2" style="height: 20px;">
+                                            <div class="progress-bar" 
+                                                 t-att-style="'width:' + state.stats.avg_score + '%'"
+                                                 t-att-class="'progress-bar-' + (state.stats.avg_score >= 80 ? 'success' : state.stats.avg_score >= 60 ? 'warning' : 'danger')"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="text-muted">Avg Review Time</h6>
+                                        <h3><t t-esc="state.stats.avg_review_time"/> min</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pull Requests List -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fa fa-code-pull-request mr-2"/>Recent Pull Requests
+                                    <span class="badge badge-secondary ml-2"><t t-esc="state.recent_prs.length"/></span>
+                                </h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Status</th>
+                                            <th>Score</th>
+                                            <th>Time</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.recent_prs" t-as="pr" t-key="pr.id">
+                                            <tr t-att-class="'table-' + pr.severity_class">
+                                                <td class="text-center">
+                                                    <span class="badge badge-secondary"><t t-esc="pr.number"/></span>
+                                                </td>
+                                                <td>
+                                                    <i class="fa mr-1" t-att-class="pr.icon"/>
+                                                    <strong><t t-esc="pr.title"/></strong>
+                                                </td>
+                                                <td>
+                                                    <img t-if="pr.author_avatar" 
+                                                         t-att-src="pr.author_avatar"
+                                                         class="rounded-circle mr-2"
+                                                         style="width: 24px; height: 24px;"/>
+                                                    <t t-esc="pr.author"/>
+                                                </td>
+                                                <td>
+                                                    <span t-attf-class="badge badge-#{pr.status_class}">
+                                                        <t t-esc="pr.review_status"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress mr-2" style="width: 80px;">
+                                                            <div class="progress-bar" 
+                                                                 t-att-style="'width:' + pr.ai_score + '%'"
+                                                                 t-att-class="pr.score_class"/>
+                                                        </div>
+                                                        <small><t t-esc="pr.ai_score"/>%</small>
+                                                    </div>
+                                                </td>
+                                                <td class="text-muted">
+                                                    <small><t t-esc="pr.time_ago"/></small>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary" 
+                                                            t-on-click="() => this.onViewPr(pr)">
+                                                        View
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr t-if="state.recent_prs.length === 0">
+                                            <td colspan="7" class="text-center text-muted py-4">
+                                                <i class="fa fa-inbox fa-2x mb-2"/>
+                                                <p class="mb-0">No pull requests found</p>
+                                                <small>Add a GitHub repository to get started</small>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

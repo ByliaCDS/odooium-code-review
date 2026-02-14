@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Notification Template for Review Complete -->
+        <record id="mail_template_review_complete" model="mail.template">
+            <field name="name">Odooium Review Complete</field>
+            <field name="subject">🐰 Odooium AI Review Complete - PR #${object.number}</field>
+            <field name="model_id" ref="model_odooium_pull_request"/>
+            <field name="email_from">${(object.repository_id.owner or 'Odooium')}</field>
+            <field name="body_html" type="html">
+                <div style="padding: 20px; font-family: Arial, sans-serif;">
+                    <h2 style="color: #714B67;">🐰 Odooium AI Review Complete</h2>
+                    <p>Hi ${object.author},</p>
+                    <p>The AI review for your PR has been completed!</p>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <h3>PR: #${object.number} - ${object.title}</h3>
+                        <p><strong>Score: ${object.ai_score}/100</strong></p>
+                        <ul>
+                            <li>Critical: ${object.critical_issues}</li>
+                            <li>High: ${object.high_issues}</li>
+                            <li>Medium: ${object.medium_issues}</li>
+                            <li>Low: ${object.low_issues}</li>
+                            <li>Info: ${object.info_count}</li>
+                        </ul>
+                    </div>
+                    <p>
+                        <a href="${object.url}" style="background: #714B67; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">
+                            View on GitHub
+                        </a>
+                    </p>
+                    <p style="color: #6c757d; font-size: 12px;">
+                        Powered by Odooium - AI-Powered Code Review for Odoo Development Teams
+                    </p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>
